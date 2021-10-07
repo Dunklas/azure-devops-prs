@@ -21,10 +21,15 @@ namespace AzureDevOpsPrs
                     Status = PullRequestStatus.Active
                 });
                 pullRequests.ForEach(pr => {
-                    Console.WriteLine($"{pr.PullRequestId}: {pr.Title} ({pr.Repository.Name})\n{pr.Url}\n\n");
+                    Console.WriteLine($"{pr.PullRequestId}: {pr.Title} ({pr.Repository.Name})\n{UrlForPr(config.Url, config.Project, pr.PullRequestId)}/\n\n");
                 });
             }
 
+        }
+
+        private static string UrlForPr(Uri url, string project, int prId)
+        {
+            return $"{url}/_git/{project}/pullrequest/{prId}";
         }
     }
 }
