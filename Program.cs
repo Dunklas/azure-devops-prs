@@ -4,19 +4,19 @@ using Microsoft.TeamFoundation.SourceControl.WebApi;
 using System;
 using System.Threading.Tasks;
 
-namespace ado_prs
+namespace AzureDevOpsPrs
 {
     class Program
     {
         static async Task Main(string[] args)
         {
-            var credentials = new VssBasicCredential("", "<-PAT->");
-            var uri = new Uri("<-URL->");
-            var connection = new VssConnection(uri, credentials);
+            var config = new Configuration();
+            var credentials = new VssBasicCredential("", config.PersonalAccessToken);
+            var connection = new VssConnection(config.Url, credentials);
 
             using (GitHttpClient gitClient = connection.GetClient<GitHttpClient>())
             {
-                var pullRequests = await gitClient.GetPullRequestsByProjectAsync("<-PROJECT->", new GitPullRequestSearchCriteria
+                var pullRequests = await gitClient.GetPullRequestsByProjectAsync(config.Project, new GitPullRequestSearchCriteria
                 {
                     Status = PullRequestStatus.Active
                 });
