@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.Services.WebApi;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace AzureDevOpsPrs
 {
@@ -20,16 +21,21 @@ namespace AzureDevOpsPrs
                 {
                     Status = PullRequestStatus.Active
                 });
-                pullRequests.ForEach(pr => {
-                    Console.WriteLine($"{pr.PullRequestId}: {pr.Title} ({pr.Repository.Name})\n{UrlForPr(config.Url, config.Project, pr.PullRequestId)}/\n\n");
-                });
+                var output = String.Join("\n\n", pullRequests
+                    .Select(pr => FormatPr(config, pr))
+                    .ToList());
+                Console.WriteLine(output);
             }
 
         }
 
-        private static string UrlForPr(Uri url, string project, int prId)
+        private static string FormatPr(Configuration config, GitPullRequest pr)
         {
-            return $"{url}/_git/{project}/pullrequest/{prId}";
+            return $"{pr.PullRequestId}: {pr.Title} ({pr.Repository.Name})\n{UrlForPr(config, pr.PullRequestId)}";
+        }
+        private static string UrlForPr(Configuration config, int prId)
+        {
+            return $"{config.Url}/_git/{config.Project}/pullrequest/{prId}";
         }
     }
 }
