@@ -40,7 +40,7 @@ The json file should have the following properties:
 The folder where the file should be located depends on your operating system.
 
 - Linux: `/.config/azure-devops-prs/config.json`
-- Windows: `???`
+- Windows: `%APPDATA%\azure-devops-prs\config.json`
 
 ## Usage
 
