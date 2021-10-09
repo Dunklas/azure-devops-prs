@@ -11,6 +11,15 @@ namespace AzureDevOpsPrs
         }
     }
 
+    public class MissingConfigurationException 
+        : ConfigurationException
+    {
+        public MissingConfigurationException(string message)
+            : base(message)
+        {
+        }
+    }
+
     public class InvalidJsonException
         : ConfigurationException
     {

@@ -13,6 +13,10 @@ namespace AzureDevOpsPrs
                 "azure-devops-prs",
                 "config.json"
             );
+            if (!File.Exists(path))
+            {
+                throw new MissingConfigurationException($"No configuration file found at: {path}");
+            }
             return String.Join("\n", File.ReadAllLines(path));
         }
 
