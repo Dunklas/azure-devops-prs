@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
 
 namespace AzureDevOpsPrs
@@ -11,23 +10,39 @@ namespace AzureDevOpsPrs
         public string PersonalAccessToken { get; }
         public string Project { get; }
 
-        public Configuration()
+        public Configuration(string jsonConfig)
         {
-            var jsonConfig = Load();
-            Url = new Uri(jsonConfig.GetValueOrDefault("url"));
-            PersonalAccessToken = jsonConfig.GetValueOrDefault("pat");
-            Project = jsonConfig.GetValueOrDefault("project");
+            var json = ReadJson(jsonConfig); 
+            PersonalAccessToken = GetValue(json, "pat");
+            Project = GetValue(json, "project");
+            Uri url;
+            if (!Uri.TryCreate(GetValue(json, "url"), UriKind.Absolute, out url))
+            {
+                throw new InvalidValueException($"Configuration file contains an invalid value: {GetValue(json, "url")}");
+            }
+            Url = url;
         }
 
-        private Dictionary<string, string> Load()
+        private string GetValue(Dictionary<string, string> json, string key)
         {
-            var path = Path.Join(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "azure-devops-prs",
-                "config.json"
-            );
-            var raw = String.Join("\n", File.ReadAllLines(path));
-            return JsonSerializer.Deserialize<Dictionary<string, string>>(raw);
+            string value = null;
+            if (!json.TryGetValue(key, out value))
+            {
+                throw new MissingPropertyException($"Configuration file is missing required property: {key}");
+            }
+            return value;
+        }
+
+        private Dictionary<string, string> ReadJson(string jsonConfig)
+        {
+            try
+            {
+                return JsonSerializer.Deserialize<Dictionary<string, string>>(jsonConfig);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidJsonException("Configuration file contains invalid json");
+            }
         }
     }
 }

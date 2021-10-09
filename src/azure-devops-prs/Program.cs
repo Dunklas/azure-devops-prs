@@ -11,7 +11,10 @@ namespace AzureDevOpsPrs
     {
         static async Task Main(string[] args)
         {
-            var config = new Configuration();
+            var config = new Configuration
+            (
+                new ConfigurationFileReader().Read()
+            );
             var credentials = new VssBasicCredential("", config.PersonalAccessToken);
             var connection = new VssConnection(config.Url, credentials);
 
