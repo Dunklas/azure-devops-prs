@@ -8,7 +8,7 @@ Install the tool via the following steps:
 
 1. Clone the repository
 2. Navigate to the repository root
-3. Run `dotnet pack`
+3. Run `dotnet pack --output nupkg/`
 4. Run `dotnet tool install -g azure-devops-prs --add-source=./nupkg`
 
 Next, you need to configure the tool.
@@ -18,8 +18,7 @@ Next, you need to configure the tool.
 Update is done by uninstall, followed by install.
 
 1. `dotnet tool uninstall azure-devops-prs --global`
-2. `dotnet pack`
-3. `dotnet tool install -g azure-devops-prs --add-source=./nupkg`
+2. Repeat steps for installation
 
 ## Configuration
 
