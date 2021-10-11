@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AzureDevOpsPrs
@@ -20,9 +21,14 @@ namespace AzureDevOpsPrs
 
             var client = new AzureDevOpsClient(config.Url, config.PersonalAccessToken);
             var prs = await client.ListPullRequests(config.Project);
-            Console.WriteLine(String.Join("\n\n", prs));
+            Console.WriteLine(String.Join("\n\n", prs
+                .Select(pr => FormatPr(pr))));
         }
 
         
+        private static string FormatPr(PullRequest pr)
+        {
+            return $"{pr.Id}: {pr.Title} ({pr.Repository})\n{pr.Url}";
+        }
     }
 }

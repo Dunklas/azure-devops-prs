@@ -20,7 +20,7 @@ namespace AzureDevOpsPrs
             _connection = new VssConnection(url, new VssBasicCredential("", pat));
         }
 
-        public async Task<List<string>> ListPullRequests(string project)
+        public async Task<List<PullRequest>> ListPullRequests(string project)
         {
             using (GitHttpClient gitClient = _connection.GetClient<GitHttpClient>())
             {
@@ -29,17 +29,23 @@ namespace AzureDevOpsPrs
                     Status = PullRequestStatus.Active
                 });
                 return pullRequests
-                    .Select(pr => FormatPr(project, pr))
+                    .Select(pr => ToPullRequest(pr, project))
                     .ToList();
             }
         }
-        private string FormatPr(string project, GitPullRequest pr)
+
+        private PullRequest ToPullRequest(GitPullRequest azurePr, string project)
         {
-            return $"{pr.PullRequestId}: {pr.Title} ({pr.Repository.Name})\n{UrlForPr(project, pr.PullRequestId)}";
-        }
-        private string UrlForPr(string project, int prId)
-        {
-            return $"{_url}/_git/{project}/pullrequest/{prId}";
+            return new PullRequest.Builder()
+                .SetId(azurePr.PullRequestId)
+                .SetTitle(azurePr.Title)
+                .SetDescription(azurePr.Description)
+                .SetCreatedAt(azurePr.CreationDate)
+                .SetCreatedBy(azurePr.CreatedBy.DisplayName)
+                .SetUrl(new Uri(_url, $"_git/{project}/pullrequest/{azurePr.PullRequestId}"))
+                .SetRepository(azurePr.Repository.Name)
+                .SetStatus(azurePr.Status.ToString())
+                .Build();
         }
     }
 }
