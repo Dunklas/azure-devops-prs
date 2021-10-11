@@ -42,7 +42,7 @@ namespace AzureDevOpsPrs
                 .SetDescription(azurePr.Description)
                 .SetCreatedAt(azurePr.CreationDate)
                 .SetCreatedBy(azurePr.CreatedBy.DisplayName)
-                .SetUrl(new Uri(_url, $"_git/{project}/pullrequest/{azurePr.PullRequestId}"))
+                .SetUrl(new Uri($"{_url}/_git/{project}/pullrequest/{azurePr.PullRequestId}"))
                 .SetRepository(azurePr.Repository.Name)
                 .SetStatus(azurePr.Status.ToString())
                 .Build();
