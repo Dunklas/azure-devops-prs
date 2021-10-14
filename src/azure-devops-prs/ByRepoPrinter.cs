@@ -8,34 +8,53 @@ namespace AzureDevOpsPrs
     public class ByRepoPrinter
         : PullRequestsPrinter
     {
-        public void Print(List<PullRequest> pullRequests)
-        {
-            var prsByRepo = pullRequests
-                .OrderBy(pr => pr.Repository)
-                .GroupBy(
-                    pr => pr.Repository,
-                    pr => pr,
-                    (repo, pr) => new { Repository = repo, PullRequests = pr.ToList()}
-                );
+        private const int TITLE_MAX_LENGTH = 40; 
+        private int prMaxLength;
+        private int titleMaxLength;
+        private Dictionary<string, List<PullRequest>> prsByRepo;
 
-            var formattedRepos = new List<string>();
+        public ByRepoPrinter(List<PullRequest> pullRequests)
+        {
+            prMaxLength = pullRequests
+                .Select(pr => FormatPrId(pr.Id)) 
+                .Select(formattedPr => formattedPr.Length)
+                .Max();
+            titleMaxLength = Math.Min(TITLE_MAX_LENGTH, pullRequests
+                .Select(pr => pr.Title)
+                .Select(title => title.Length)
+                .Max());
+            prsByRepo = pullRequests
+                .OrderBy(pr => pr.Repository)
+                .GroupBy(pr => pr.Repository)
+                .ToDictionary(g => g.Key, g => g.ToList());
+        }
+
+        public void Print()
+        {
             Console.Write(Environment.NewLine);
             foreach (var repoAndPrs in prsByRepo)
             {
-                Console.Write($" ___ {repoAndPrs.Repository} ___{Environment.NewLine}{Environment.NewLine}");
-                repoAndPrs.PullRequests
+                Console.Write($" ___ {repoAndPrs.Key} ___{Environment.NewLine}{Environment.NewLine}");
+                repoAndPrs.Value
                     .ForEach(pr =>
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write(String.Format("{0,-6}", $" #{pr.Id} "));
+                        Console.Write($" {FormatPrId(pr.Id)} ".PadRight(prMaxLength + 2));
                         Console.ResetColor();
-                        Console.Write(String.Format("{0,-40} {1,-30}{2}", Truncate(pr.Title, 40), pr.Url, Environment.NewLine));
+                        Console.Write($"{Truncate(pr.Title, titleMaxLength)} ".PadRight(titleMaxLength + 1));
+                        Console.Write(pr.Url);
+                        Console.Write(Environment.NewLine);
                     });
                 Console.Write(Environment.NewLine);
             }
         }
 
-        public string Truncate(string text, int wantedLength)
+        private string FormatPrId(int prId)
+        {
+            return $"#{prId}";
+        }
+
+        private string Truncate(string text, int wantedLength)
         {
             var finisher = "...";
             if (text.Length <= wantedLength)

@@ -4,6 +4,6 @@ namespace AzureDevOpsPrs
 {
     public interface PullRequestsPrinter
     {
-        void Print(List<PullRequest> pullRequests);
+        void Print();
     }
 }

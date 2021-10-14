@@ -21,8 +21,8 @@ namespace AzureDevOpsPrs
 
             var client = new AzureDevOpsClient(config.Url, config.PersonalAccessToken);
             var prs = await client.ListPullRequests(config.Project);
-            PullRequestsPrinter formatter = new ByRepoPrinter();
-            formatter.Print(prs);
+            PullRequestsPrinter formatter = new ByRepoPrinter(prs);
+            formatter.Print();
         }
     }
 }
