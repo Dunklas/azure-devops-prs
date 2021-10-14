@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Services.WebApi;
 
 namespace AzureDevOpsPrs
 {
-    public class AzureDevOpsClient 
+    public class AzureDevOpsClient
     {
 
         private Uri _url;

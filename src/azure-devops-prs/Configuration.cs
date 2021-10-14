@@ -12,7 +12,7 @@ namespace AzureDevOpsPrs
 
         public Configuration(string jsonConfig)
         {
-            var json = ReadJson(jsonConfig); 
+            var json = ReadJson(jsonConfig);
             PersonalAccessToken = GetValue(json, "pat");
             Project = GetValue(json, "project");
             Uri url;

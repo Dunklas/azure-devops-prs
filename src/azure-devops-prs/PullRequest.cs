@@ -27,21 +27,21 @@ namespace AzureDevOpsPrs
 
         public class Builder
         {
-            internal int Id {get; private set; }
+            internal int Id { get; private set; }
             internal string Title { get; private set; }
-            internal string Description {get; private set;}
-            internal string CreatedBy {get; private set;}
-            internal DateTime CreatedAt {get; private set;}
-            internal Uri Url {get; private set;}
-            internal string Repository {get; private set;}
-            internal string Status {get; private set;}
+            internal string Description { get; private set; }
+            internal string CreatedBy { get; private set; }
+            internal DateTime CreatedAt { get; private set; }
+            internal Uri Url { get; private set; }
+            internal string Repository { get; private set; }
+            internal string Status { get; private set; }
 
             public Builder SetId(int id)
             {
                 Id = id;
                 return this;
             }
-            
+
             public Builder SetTitle(string title)
             {
                 Title = title;

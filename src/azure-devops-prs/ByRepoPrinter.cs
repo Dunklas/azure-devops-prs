@@ -8,7 +8,7 @@ namespace AzureDevOpsPrs
     public class ByRepoPrinter
         : PullRequestsPrinter
     {
-        private const int TITLE_MAX_LENGTH = 40; 
+        private const int TITLE_MAX_LENGTH = 40;
         private int prMaxLength;
         private int titleMaxLength;
         private Dictionary<string, List<PullRequest>> prsByRepo;
@@ -16,7 +16,7 @@ namespace AzureDevOpsPrs
         public ByRepoPrinter(List<PullRequest> pullRequests)
         {
             prMaxLength = pullRequests
-                .Select(pr => FormatPrId(pr.Id)) 
+                .Select(pr => FormatPrId(pr.Id))
                 .Select(formattedPr => formattedPr.Length)
                 .Max();
             titleMaxLength = Math.Min(TITLE_MAX_LENGTH, pullRequests

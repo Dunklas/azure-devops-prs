@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace AzureDevOpsPrsTest
 {
-    public class ConfigurationTest 
+    public class ConfigurationTest
     {
         [Fact]
         public void ShouldThrowOnInvalidJson()

@@ -11,7 +11,7 @@ namespace AzureDevOpsPrs
         }
     }
 
-    public class MissingConfigurationException 
+    public class MissingConfigurationException
         : ConfigurationException
     {
         public MissingConfigurationException(string message)
