@@ -34,7 +34,9 @@ namespace AzureDevOpsPrs
             Console.Write(Environment.NewLine);
             foreach (var repoAndPrs in prsByRepo)
             {
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.Write($" ___ {repoAndPrs.Key} ___{Environment.NewLine}{Environment.NewLine}");
+                Console.ResetColor();
                 repoAndPrs.Value
                     .ForEach(pr =>
                     {
