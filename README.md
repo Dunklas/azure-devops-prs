@@ -28,13 +28,14 @@ The json file should have the following properties:
 
 ```
 {
-    "url": "https://your-azure-devops-url",
-    "pat": "personal-access-token*",
-    "project": "project"
+    "url": "https://your-azure-devops-url"*,
+    "pat": "personal-access-token"**,
+    "project": "name-of-project"
 }
 ```
+**\*** Note that the url should not contain the project
 
-**\*** The personal access token must have read repository permissions
+**\*\*** The personal access token must have read repository permissions
 
 The folder where the file should be located depends on your operating system.
 
