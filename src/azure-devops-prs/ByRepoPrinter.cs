@@ -8,22 +8,28 @@ namespace AzureDevOpsPrs
     public class ByRepoPrinter
         : PullRequestsPrinter
     {
-        private const int TITLE_MAX_LENGTH = 40;
-        private int prMaxLength;
-        private int titleMaxLength;
-        private Dictionary<string, List<PullRequest>> prsByRepo;
+        private const int TitleMaxLength = 40;
+        private readonly int _prMaxLength;
+        private readonly int _titleMaxLength;
+        private readonly Dictionary<string, List<PullRequest>> _prsByRepo;
 
-        public ByRepoPrinter(List<PullRequest> pullRequests)
+        public ByRepoPrinter(IReadOnlyCollection<PullRequest> pullRequests)
         {
-            prMaxLength = pullRequests
+            if (!pullRequests.Any())
+            {
+                _prMaxLength = 0;
+                _titleMaxLength = 0;
+                _prsByRepo = new Dictionary<string, List<PullRequest>>();
+            }
+            _prMaxLength = pullRequests
                 .Select(pr => FormatPrId(pr.Id))
                 .Select(formattedPr => formattedPr.Length)
                 .Max();
-            titleMaxLength = Math.Min(TITLE_MAX_LENGTH, pullRequests
+            _titleMaxLength = Math.Min(TitleMaxLength, pullRequests
                 .Select(pr => pr.Title)
                 .Select(title => title.Length)
                 .Max());
-            prsByRepo = pullRequests
+            _prsByRepo = pullRequests
                 .OrderBy(pr => pr.Repository)
                 .GroupBy(pr => pr.Repository)
                 .ToDictionary(g => g.Key, g => g.ToList());
@@ -32,7 +38,7 @@ namespace AzureDevOpsPrs
         public void Print()
         {
             Console.Write(Environment.NewLine);
-            foreach (var repoAndPrs in prsByRepo)
+            foreach (var repoAndPrs in _prsByRepo)
             {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.Write($" ___ {repoAndPrs.Key} ___{Environment.NewLine}{Environment.NewLine}");
@@ -41,9 +47,9 @@ namespace AzureDevOpsPrs
                     .ForEach(pr =>
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write($" {FormatPrId(pr.Id)} ".PadRight(prMaxLength + 2));
+                        Console.Write($" {FormatPrId(pr.Id)} ".PadRight(_prMaxLength + 2));
                         Console.ResetColor();
-                        Console.Write($"{Truncate(pr.Title, titleMaxLength)} ".PadRight(titleMaxLength + 1));
+                        Console.Write($"{Truncate(pr.Title, _titleMaxLength)} ".PadRight(_titleMaxLength + 1));
                         Console.Write(pr.Url);
                         Console.Write(Environment.NewLine);
                     });
