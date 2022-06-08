@@ -2,7 +2,6 @@ using Xunit;
 using AzureDevOpsPrs;
 using System.Collections.Generic;
 using System.Text.Json;
-using System;
 using System.Linq;
 
 namespace AzureDevOpsPrsTest
@@ -27,7 +26,7 @@ namespace AzureDevOpsPrsTest
         {
             Assert.Throws<MissingPropertyException>(() =>
             {
-                new Configuration(createConfig(propertiesToExclude));
+                new Configuration(CreateConfig(propertiesToExclude));
             });
         }
 
@@ -45,7 +44,7 @@ namespace AzureDevOpsPrsTest
             });
         }
 
-        private string createConfig(string[] keysToExclude)
+        private string CreateConfig(string[] keysToExclude)
         {
             var properties = new List<(string key, string value)>
             {
