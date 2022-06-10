@@ -1,2 +1,5 @@
 .vscode
 nupkg
+.idea/
+*.DotSettings.user
+
