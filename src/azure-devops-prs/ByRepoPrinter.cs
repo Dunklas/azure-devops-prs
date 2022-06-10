@@ -20,6 +20,7 @@ namespace AzureDevOpsPrs
                 _prMaxLength = 0;
                 _titleMaxLength = 0;
                 _prsByRepo = new Dictionary<string, List<PullRequest>>();
+                return;
             }
             _prMaxLength = pullRequests
                 .Select(pr => FormatPrId(pr.Id))

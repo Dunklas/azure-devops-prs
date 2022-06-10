@@ -2,12 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>AzureDevOpsPrs</RootNamespace>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>azure-devops-prs</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
     <Version>1.0</Version>
+    <LangVersion>10</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
